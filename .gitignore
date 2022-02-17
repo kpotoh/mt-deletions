@@ -1,0 +1,6 @@
+data/*
+!data/share
+*.sif
+env*
+*.ipynb_checkpoints
+*__pycache__
