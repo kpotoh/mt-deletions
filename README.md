@@ -30,8 +30,4 @@ Deletions distribution
 egrep -o "\-*" data | sort | uniq -c | awk '{print $1 "\t" length($2) "\t" $2 "\t" length($2)%3}' | tee logs/gaps_birds.log
 ```
 
-
-
-```
-TODO
-```
+**[Analysis](./nb/EDA_mulal.ipynb) in jupyter notebook**
