@@ -1,0 +1,18 @@
+kpotoh:~/mt-deletions$ bash scripts/1.bwa.sh bwa samtools data/share/NC_012920.1.fasta data/raw/sequence.fasta 24
+[bwa_index] Pack FASTA... 0.00 sec
+[bwa_index] Construct BWT for the packed sequence...
+[bwa_index] 0.00 seconds elapse.
+[bwa_index] Update BWT... 0.00 sec
+[bwa_index] Pack forward-only FASTA... 0.00 sec
+[bwa_index] Construct SA from BWT and Occ... 0.00 sec
+[main] Version: 0.7.17-r1188
+[main] CMD: bwa index data/share/NC_012920.1.fasta
+[main] Real time: 0.018 sec; CPU: 0.006 sec
+[M::bwa_idx_load_from_disk] read 0 ALT contigs
+[bsw2_aln] read 14486 sequences/pairs (240001681 bp) ...
+[bsw2_aln] read 14490 sequences/pairs (240027497 bp) ...
+[bsw2_aln] read 14540 sequences/pairs (240005433 bp) ...
+[bsw2_aln] read 12929 sequences/pairs (214195916 bp) ...
+[main] Version: 0.7.17-r1188
+[main] CMD: bwa bwasw -t 24 data/share/NC_012920.1.fasta data/raw/sequence.fasta
+[main] Real time: 134.043 sec; CPU: 3110.956 sec
