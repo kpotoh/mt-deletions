@@ -2,6 +2,7 @@ import random
 from collections import Counter
 from multiprocessing import Pool
 
+import pandas as pd
 from Bio.Restriction import Analysis, AllEnzymes
 from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
@@ -14,7 +15,7 @@ PROB = 0.01
 enzymes = AllEnzymes.copy()
 
 
-def cleanup_enzyme_collection():
+def _cleanup_enzyme_collection():
     fasta = SeqIO.parse(PATH_TO_SEQS, "fasta")
     n = 0
     pot_rs = []
@@ -42,15 +43,23 @@ def cleanup_enzyme_collection():
 def extract_restr_enz(rec: SeqRecord) -> list:
     anal = Analysis(enzymes, rec.seq, linear=False)
     pot_rs = []
-    for restr_enz, positions in anal.mapping.items():
-        if len(positions) == 1:
-            pot_rs.append(restr_enz)
+    for restr_enz, positions in anal.with_N_sites(1).items():
+        pos = positions[0]
+        re_name = repr(restr_enz)
+        site = restr_enz.site
+
+        one_data = {
+            "RE": re_name,
+            "Site": site,
+            "SeqName": rec.description,
+            "CutPos": pos,
+        }
+        pot_rs.append(one_data)
     return pot_rs
 
 
 def main():
-    cleanup_enzyme_collection()
-
+    """ 1 hour on 23 threads """
     fasta = SeqIO.parse(PATH_TO_SEQS, "fasta")
     with Pool(THREADS) as p:
         collection_of_pot_rs = p.map(extract_restr_enz, fasta)
@@ -60,13 +69,12 @@ def main():
         for x in xx:
             pot_rs.append(x)  
     
-    ctr = Counter(pot_rs)
-    most_frequent_rs = {r: v for r, v in ctr.items() if v > 56446 - 1000}
+    df = pd.DataFrame(pot_rs)
+    df.to_csv("../data/processed/re.csv", index=None)
 
-    for rs, num in most_frequent_rs.items():
-        print(rs, rs.site, num)
-
-
+    df_counts = df.RE.value_counts().reset_index()
+    df_counts.columns = ["RE", "CuttedSeqs"]
+    df_counts.to_csv("../data/share/cuted_seqs_num.csv", index=None)
 
 
 if __name__ == "__main__":
