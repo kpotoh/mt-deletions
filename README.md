@@ -1,19 +1,33 @@
-# mt-deletions
+# mt-restrictases
 
+## Task
+### Search the restrictases that:
+- do **only cut** in human mitochondrial genome
+- cut majority of the human population mitochondrial genomes
+ 
 
 ## Workflow
-
 ### 1 Download human mt genomes from [NCBI](https://www.ncbi.nlm.nih.gov/nuccore/?term=ddbj_embl_genbank%5Bfilter%5D+AND+txid9606%5Borgn%3Anoexp%5D+AND+complete-genome%5Btitle%5D+AND+mitochondrion%5Bfilter%5D) with query to **Nucleotide database**:
 ```
 ddbj_embl_genbank[filter] AND txid9606[orgn:noexp] AND complete-genome[title] AND mitochondrion[filter] 
 ```
+**Downloaded 56445 human mt-genomes**
 
-### 2 Clean up sequences from non human mt genomes
+### 2 Clean up sequences from non human mt genomes (optional, in downloaded sequences there are only human mt-genomes)
 ```
 bash scripts/0.cleanup_sequences.sh SEQS OUT_SEQS
 ```
 
-### 3 Align to reference and form the multiple alignment
+### 3.1 Brute force method
+Just search the restriction enzymes that do only one cut in human mt-genome using biopython
+
+```
+python3 bruteforce_search_of_re.py
+```
+**[Analysis](./nb/EDA_bruteforce.ipynb) in jupyter notebook**
+
+
+### 3.2 Align genomes to reference and extract conservative sites from multiple alignment (optional) 
 ```
 bash scripts/1.bwa.sh bwa samtools data/share/NC_012920.1.fasta data/raw/sequence.fasta 24
 
@@ -23,11 +37,15 @@ perl scripts/2.longest-alignments.pl data/interim/sequence.fasta.sam > data/inte
 
 python3 scripts/3.sam2fasta.py data/share/NC_012920.1.fasta data/interim/sequence.fasta.purified.sam data/interim/mulal.fasta
 ```
-
-### 4 Analize alignment to search ubiquitous restriction sites
-Deletions distribution
-```
-egrep -o "\-*" data | sort | uniq -c | awk '{print $1 "\t" length($2) "\t" $2 "\t" length($2)%3}' | tee logs/gaps_birds.log
-```
-
 **[Analysis](./nb/EDA_mulal.ipynb) in jupyter notebook**
+
+### 4 Look at deletions distribution (optional)
+```
+egrep -o "\-*" data/interim/mulal.fasta | sort | uniq -c | awk '{print $1 "\t" length($2) "\t" $2 "\t" length($2)%3}' | tee logs/gaps_birds.log
+```
+
+## Results of powerful brute force approach
+1. Effectivity and applicability (number of genomes cutted once) of restrictases are writed in file [cuted_seqs_num.csv](data/share/cuted_seqs_num.csv)
+2. Graph of found enzymes cut localization:
+
+<img src="./figures/cut_position.png" width="1000">

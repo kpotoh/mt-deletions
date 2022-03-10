@@ -9,6 +9,8 @@ from Bio import SeqIO
 import tqdm
 
 PATH_TO_SEQS = "data/raw/sequence.fasta"
+PATH_TO_OUT_RE = "data/processed/re.csv"
+PATH_TO_OUT_CUTNUM = "data/share/cuted_seqs_num.csv"
 THREADS = 24  # and 10GB of RAM
 PROB = 0.01
 
@@ -16,6 +18,7 @@ enzymes = AllEnzymes.copy()
 
 
 def _cleanup_enzyme_collection():
+    """ olf function. need to rewrite if want to use """
     fasta = SeqIO.parse(PATH_TO_SEQS, "fasta")
     n = 0
     pot_rs = []
@@ -33,7 +36,7 @@ def _cleanup_enzyme_collection():
     ctr = Counter(pot_rs)
     m = 0
     for enz, amount in ctr.items():
-        if amount != n:
+        if amount != n:  # here main problem
             if enz in enzymes:
                 enzymes.remove(enz)
                 m += 1
@@ -70,11 +73,11 @@ def main():
             pot_rs.append(x)  
     
     df = pd.DataFrame(pot_rs)
-    df.to_csv("../data/processed/re.csv", index=None)
+    df.to_csv(PATH_TO_OUT_RE, index=None)
 
     df_counts = df.RE.value_counts().reset_index()
     df_counts.columns = ["RE", "CuttedSeqs"]
-    df_counts.to_csv("../data/share/cuted_seqs_num.csv", index=None)
+    df_counts.to_csv(PATH_TO_OUT_CUTNUM, index=None)
 
 
 if __name__ == "__main__":
