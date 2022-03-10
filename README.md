@@ -4,7 +4,8 @@
 ### Search the restrictases that:
 - do **only cut** in human mitochondrial genome
 - cut majority of the human population mitochondrial genomes
- 
+- cut genome out of D-loop that often contains deletions
+
 
 ## Workflow
 ### 1 Download human mt genomes from [NCBI](https://www.ncbi.nlm.nih.gov/nuccore/?term=ddbj_embl_genbank%5Bfilter%5D+AND+txid9606%5Borgn%3Anoexp%5D+AND+complete-genome%5Btitle%5D+AND+mitochondrion%5Bfilter%5D) with query to **Nucleotide database**:
@@ -48,4 +49,6 @@ egrep -o "\-*" data/interim/mulal.fasta | sort | uniq -c | awk '{print $1 "\t" l
 1. Effectivity and applicability (number of genomes cutted once) of restrictases are writed in file [cuted_seqs_num.csv](data/share/cuted_seqs_num.csv)
 2. Graph of found enzymes cut localization:
 
-<img src="./figures/cut_position.png" width="1000">
+<img src="./figures/cut_position.png">
+
+## Main candidate - **ClaI**
