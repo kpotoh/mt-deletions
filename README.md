@@ -1,7 +1,6 @@
 # mt-restrictases
 
-## Task
-### Search the restrictases that:
+## Task - Search the restrictases (RE) that:
 - do **only cut** in human mitochondrial genome
 - cut majority of the human population mitochondrial genomes
 - cut genome out of D-loop that often contains deletions
@@ -20,7 +19,7 @@ bash scripts/0.cleanup_sequences.sh SEQS OUT_SEQS
 ```
 
 ### 3.1 Brute force method
-Just search the restriction enzymes that do only one cut in human mt-genome using biopython
+Just search the restriction enzymes that do only one cut in human mt-genome in all genomes separately using biopython. As a result we get RE and position of its cut in each genome.
 
 ```
 python3 bruteforce_search_of_re.py
@@ -42,11 +41,11 @@ python3 scripts/3.sam2fasta.py data/share/NC_012920.1.fasta data/interim/sequenc
 
 ### 4 Look at deletions distribution (optional)
 ```
-egrep -o "\-*" data/interim/mulal.fasta | sort | uniq -c | awk '{print $1 "\t" length($2) "\t" $2 "\t" length($2)%3}' | tee logs/gaps_birds.log
+egrep -o "\-*" data/interim/mulal.fasta | sort | uniq -c | awk '{print $1 "\t" length($2) "\t" $2 "\t" length($2)%3}' | tee logs/gaps.log
 ```
 
 ## Results of powerful brute force approach
-1. Effectivity and applicability (number of genomes cutted once) of restrictases are writed in file [cuted_seqs_num.csv](data/share/cuted_seqs_num.csv)
+1. Effectivity and applicability (number of genomes cutted once) of restrictases dumped in the file [cuted_seqs_num.csv](data/share/cuted_seqs_num.csv)
 2. Graph of found enzymes cut localization:
 
 <img src="./figures/cut_position.png">
