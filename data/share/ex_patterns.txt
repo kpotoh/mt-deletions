@@ -1,9 +1,0 @@
-RNA
-rna
-transcr
-gene
-nuclear
-protein
-product
-UNVERIFIED
-unverified
