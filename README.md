@@ -50,4 +50,5 @@ egrep -o "\-*" data/interim/mulal.fasta | sort | uniq -c | awk '{print $1 "\t" l
 
 <img src="./figures/cut_position.png">
 
-## Main candidate - **ClaI**
+## Main candidate - **[ClaI](https://international.neb.com/products/r0197-clai#Product%20Information)**
+Reason [here](./nb/EDA_bruteforce.ipynb#Result_description)
